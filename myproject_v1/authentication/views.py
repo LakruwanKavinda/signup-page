@@ -24,9 +24,12 @@ def signup_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
+            try:
             user = form.save()
             login(request, user)
             return redirect('home')
+            except Exception as e:
+                return JsonResponse({'error': str(e)}, status=400)
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
